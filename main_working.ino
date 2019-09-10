@@ -2,7 +2,7 @@
  * Author: Supportive Wearable Inertial Sensing Hand (SWISH) Team
  * Affiliation: University of Kentucky
  * Date: X/X/2019
- * Description: Serve as the intermediate data acquisition and processing unit for 
+ * Description: Serve as the intermediate data acquisition and processing unit for kinematic data coming from flex (variable resistor sensors) and IMU(s)
  *
  * 
  * ___DEVELOPMENT NOTES and ACKNOWLEDGEMENT___
@@ -19,9 +19,14 @@
 #include <Wire.h>
 //SFE_BMP180 pressure;
 double baseline;
+int analogPinZero = A0;
+
+// For testing flex resistor (analog) values
+int analogValZero = 0;
+
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600); // Initialize the Serial monitor interaction
     Wire.begin();  // I2C initiates communication
     write(0x6B, 0); //Power management registers default: 0
     write(0x6A, 0);  // I2C master 0x20 if you want it to be off, on
@@ -42,16 +47,16 @@ void loop()
     int x = (xh << 8) | (xl & 0xff);
     int y = (yh << 8) | (yl & 0xff);
     int z = (zh << 8) | (zl & 0xff);
+
+    // Analog voltage read
+    analogValZero = analogRead(analogPinZero); // Read the input pin (A0)
+    Serial.println(analogValZero); // Print the value out to serial
+    
     // Serial port outputs
-    Serial.print("X,Y,Z=");
-    Serial.print(x);
-    Serial.print(",");
-    Serial.print(y);
-    Serial.print(",");
-    Serial.println(z);
-    Serial.println("");
-    Serial.println("");
-   delay(500); 
+    if (x != -1) {
+      
+    }
+    delay(500);
 }
 byte readMag(int reg)
 {
@@ -88,4 +93,17 @@ void write(int reg, int data)
     Wire.write(reg);
     Wire.write(data);
     Wire.endTransmission(true);
+}
+
+void IMU_print(int xVal, int yVal, int zVal)
+{
+    Serial.print("X,Y,Z");
+    Serial.println("");
+    Serial.print(x);
+    Serial.print(",");
+    Serial.print(y);
+    Serial.print(",");
+    Serial.println(z);
+    Serial.println("");
+    Serial.println(""); 
 }
