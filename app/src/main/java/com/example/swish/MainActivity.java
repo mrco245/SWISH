@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import static com.example.swish.Bluetooth.mbluetoothAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,8 +30,18 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, Bluetooth.class);
                 startActivity(intent);
 
+
+
+
             }
         });
+
+        TextView BLEGloveName = (TextView)findViewById(R.id.BLEGlove);
+        String nameText;
+        Bluetooth ble = new Bluetooth();
+        nameText = ble.getBluetoothName();
+        BLEGloveName.setText(nameText);
+
 
         Button goodShotBtn = (Button) findViewById(R.id.goodShot);
         goodShotBtn.setOnClickListener(new View.OnClickListener() {

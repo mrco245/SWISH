@@ -29,6 +29,7 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     public DeviceListAdaptor mDeviceListAdapter;
     ListView lvNewDevices;
+    public static String deviceName;
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mBroadcastReciever1 = new BroadcastReceiver() {
@@ -141,10 +142,6 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_tutorial);
 
-
-       // Button btONOFF = (Button) findViewById(R.id.btnONOFF);
-       // btnEnableDisable_Discoverable = (Button) findViewById(R.id.discoverBtn);
-
         lvNewDevices = (ListView) findViewById(R.id.lvNewDevices);
         mBTDevices = new ArrayList<>();
 
@@ -178,6 +175,11 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
         });
 
     }
+    public String getBluetoothName()
+    {
+        return deviceName;
+    }
+
     public boolean isBluetoothOn()
     {
         if(mbluetoothAdapter.isEnabled())
@@ -275,8 +277,10 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
         mbluetoothAdapter.cancelDiscovery();
 
         Log.d(TAG, "onItemClick: You Clicked on a device.");
-        String deviceName = mBTDevices.get(i).getName();
+        deviceName = mBTDevices.get(i).getName();
         String deviceAddress = mBTDevices.get(i).getAddress();
+
+        setBluetoothName(deviceName);
 
         Log.d(TAG, "onItemClick: deviceName = " + deviceName);
         Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
@@ -287,6 +291,11 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
             Log.d(TAG, "Trying to pair with " + deviceName);
             mBTDevices.get(i).createBond();
         }
+    }
+
+    private String setBluetoothName(String deviceName) {
+
+        return deviceName;
     }
 }
 
