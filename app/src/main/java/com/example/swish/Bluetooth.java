@@ -10,6 +10,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -128,13 +130,14 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
     };
 
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcastReciever1);
-        unregisterReceiver(mBroadcastReciever2);
+        //unregisterReceiver(mBroadcastReciever2);
         unregisterReceiver(mBroadcastReceiver3);
-        unregisterReceiver(mBroadcastReceiver4);
+       // unregisterReceiver(mBroadcastReceiver4);
     }
 
     @Override
@@ -297,5 +300,57 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
 
         return deviceName;
     }
+
+    public boolean isConnected()
+    {
+        Intent intent = new Intent(String.valueOf(BluetoothAdapter.STATE_CONNECTED));
+        String action = intent.getAction();
+        if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()){
+            case R.id.tab_connect:
+                //Intent intent = new Intent(MainActivity.this, Bluetooth.class);
+                //startActivity(intent);
+                break;
+
+            case R.id.tab_TrainingSession:
+                //Intent intent1 = new Intent(MainActivity.this, TrainingSession.class);
+                //startActivity(intent1);
+                break;
+
+            case R.id.tab_Results:
+                //Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
+                //startActivity(intent2);
+
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
 

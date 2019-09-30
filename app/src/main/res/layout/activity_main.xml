@@ -7,44 +7,14 @@
     tools:context=".MainActivity">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="177dp"
-        android:layout_height="190dp"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="15dp"
-        app:srcCompat="@mipmap/swish_foreground" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-
-    <Button
-        android:id="@+id/bluetoothBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
-        android:layout_marginTop="28dp"
-        android:text="Connect To Glove" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/BLEGlove"
-        android:layout_below="@id/bluetoothBtn"
-        android:text="Glove Name"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/BLEGlove"
-        android:id="@+id/goodShot"
-        android:text="Good Shot"/>
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goodShot"
-        android:id="@+id/badShot"
-        android:text="Bad Shot"/>
-
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@mipmap/swish_foreground" />
 
 </RelativeLayout>
