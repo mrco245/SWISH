@@ -21,75 +21,16 @@ import static com.example.swish.Bluetooth.mbluetoothAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    View view;
-
+    public static String timeArr[] = new String[1000];
+    public static int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        view = this.getWindow().getDecorView();
-
         ////DSD Tech HC-05
-        //    //00:14:03:06:19:2D
-
-        /*
-
-        endBtn.setEnabled(false);
-        //startBtn.setEnabled(false);
-
-        if(nameText == "DSD HC-05")
-        {
-            startBtn.setEnabled(true);
-            bluetoothBtn.setEnabled(false);
-        }
-
-        bluetoothBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, Bluetooth.class);
-                startActivity(intent);
-
-            }
-        });
-
-        TextView BLEGloveName = (TextView)findViewById(R.id.BLEGlove);
-        BLEGloveName.setText(nameText);
-
-        startBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                view.setBackgroundColor(getResources().getColor(R.color.green));
-                startBtn.setEnabled(false);
-                endBtn.setEnabled(true);
-
-                //send signal through bluetooth to micro controller to start collecting
-            }
-        });
-
-
-        endBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                view.setBackgroundColor(getResources().getColor(R.color.red));
-
-                //send signal through bluetooth to microcontroller to start listening for data
-                Intent intent = new Intent(MainActivity.this, VisualFeedback.class);
-                startActivity(intent);
-
-                startBtn.setEnabled(true);
-                endBtn.setEnabled(false);
-
-            }
-        });
-
-         */
+        //00:14:03:06:19:2D
 
     }
 

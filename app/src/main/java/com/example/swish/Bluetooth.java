@@ -301,21 +301,11 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
         return deviceName;
     }
 
-    public boolean isConnected()
-    {
-        Intent intent = new Intent(String.valueOf(BluetoothAdapter.STATE_CONNECTED));
-        String action = intent.getAction();
-        if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action))
-        {
-            return true;
-        }
-        return false;
-    }
-
+    //The menu system for the flow of the application
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_bar_menu, menu);
+        getMenuInflater().inflate(R.menu.connect_bluetooth, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -331,20 +321,19 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
-            case R.id.tab_connect:
-                //Intent intent = new Intent(MainActivity.this, Bluetooth.class);
-                //startActivity(intent);
+            case R.id.home:
+                Intent intent = new Intent(Bluetooth.this, MainActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.tab_TrainingSession:
-                //Intent intent1 = new Intent(MainActivity.this, TrainingSession.class);
-                //startActivity(intent1);
+                Intent intent1 = new Intent(Bluetooth.this, TrainingSession.class);
+                startActivity(intent1);
                 break;
 
             case R.id.tab_Results:
-                //Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
-                //startActivity(intent2);
-
+                Intent intent2 = new Intent(Bluetooth.this, VisualFeedback.class);
+                startActivity(intent2);
                 break;
 
 

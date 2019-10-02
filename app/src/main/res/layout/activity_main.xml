@@ -9,12 +9,37 @@
 
         <ImageView
             android:id="@+id/imageView"
+            android:layout_width="283dp"
+            android:layout_height="369dp"
             android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             app:srcCompat="@mipmap/swish_foreground" />
+
+        <TextView
+            android:id="@+id/SWISH"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="Supportive Wearable Inertia Sensing Hand"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            app:fontFamily="casual" />
+
+        <TextView
+            android:id="@+id/Team21"
+            android:layout_below="@id/SWISH"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Team21"
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            app:fontFamily="casual"/>
 
 </RelativeLayout>
