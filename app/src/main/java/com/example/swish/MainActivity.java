@@ -60,14 +60,21 @@ public class MainActivity extends AppCompatActivity {
                     isConnected = true;
                      mDevice = device;
                 }
+                mConnectThread = new ConnectThread(mDevice);
+                mConnectThread.start();
             }
-            mConnectThread = new ConnectThread(mDevice);
-            mConnectThread.start();
         }
 
         ////DSD Tech HC-05
         //00:14:03:06:19:2D
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mConnectThread.cancel();
+        mConnectedThread.cancel();
     }
 
     private class ConnectThread extends Thread {
@@ -135,13 +142,30 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.tab_TrainingSession:
-                Intent intent1 = new Intent(MainActivity.this, TrainingSession.class);
-                startActivity(intent1);
+                if(isConnected)
+                {
+                    Intent intent1 = new Intent(MainActivity.this, TrainingSession.class);
+                    startActivity(intent1);
+                }
+                else
+                {
+                    Toast message = Toast.makeText(getApplicationContext(),"Please Connect to Glove", Toast.LENGTH_LONG);
+                    message.show();
+                }
+
                 break;
 
             case R.id.tab_Results:
-                Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
-                startActivity(intent2);
+                if(isConnected)
+                {
+                    Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
+                    startActivity(intent2);
+                }
+                else
+                {
+                    Toast message = Toast.makeText(getApplicationContext(),"Please Connect to Glove", Toast.LENGTH_LONG);
+                    message.show();
+                }
 
                 break;
 

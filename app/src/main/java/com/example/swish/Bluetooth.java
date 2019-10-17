@@ -27,7 +27,6 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
     private static final String TAG = "Bluetooth Turorial";
 
     public static BluetoothAdapter mbluetoothAdapter;
-    Button btnEnableDisable_Discoverable;
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     public DeviceListAdaptor mDeviceListAdapter;
     ListView lvNewDevices;

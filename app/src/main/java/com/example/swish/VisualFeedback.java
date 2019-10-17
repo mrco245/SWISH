@@ -1,9 +1,6 @@
 package com.example.swish;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,12 +11,15 @@ import static com.example.swish.MainActivity.timeArr;
 
 public class VisualFeedback extends AppCompatActivity {
 
+
     TextView text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visual_feedback);
+
 
         String feedback = "Training Sessions:\n";
 
@@ -38,6 +38,7 @@ public class VisualFeedback extends AppCompatActivity {
         text = (TextView)findViewById(R.id.textView);
         text.setText(feedback);
     }
+
 
 
     //sets up the menu system for the user interface
