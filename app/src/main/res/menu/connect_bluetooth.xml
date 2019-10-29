@@ -6,8 +6,6 @@
     <item
         android:id="@+id/tab_TrainingSession"
         android:title="Training Session" />
-    <item
-        android:id="@+id/tab_Results"
-        android:title="Results" />
+
 
 </menu>

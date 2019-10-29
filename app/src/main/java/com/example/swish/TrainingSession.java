@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import static com.example.swish.MainActivity.i;
-import static com.example.swish.MainActivity.mConnectedThread;
+//import static com.example.swish.MainActivity.mConnectedThread;
 import static com.example.swish.MainActivity.timeArr;
 import static com.example.swish.MainActivity.mmSocket;
 
@@ -224,11 +224,11 @@ public class TrainingSession extends AppCompatActivity {
                 startActivity(intent);
                 break;
 
-            case R.id.tab_Results:
+           /* case R.id.tab_Results:
                 Intent intent2 = new Intent(TrainingSession.this, VisualFeedback.class);
                 startActivity(intent2);
 
-                break;
+                break;*/
 
 
         }

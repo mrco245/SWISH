@@ -4,7 +4,4 @@
         android:title="Home"
         android:id="@+id/home"/>
 
-    <item
-        android:id="@+id/tab_Results"
-        android:title="Results" />
 </menu>

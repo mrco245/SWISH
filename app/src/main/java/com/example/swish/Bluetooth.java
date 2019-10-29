@@ -1,8 +1,10 @@
 package com.example.swish;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +22,11 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import me.aflak.bluetooth.constants.DeviceError;
 
 public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -31,6 +37,7 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
     public DeviceListAdaptor mDeviceListAdapter;
     ListView lvNewDevices;
     public static String deviceName;
+
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mBroadcastReciever1 = new BroadcastReceiver() {
@@ -330,15 +337,33 @@ public class Bluetooth extends AppCompatActivity implements AdapterView.OnItemCl
                 startActivity(intent1);
                 break;
 
-            case R.id.tab_Results:
+            /*case R.id.tab_Results:
                 Intent intent2 = new Intent(Bluetooth.this, VisualFeedback.class);
                 startActivity(intent2);
-                break;
+                break;*/
 
 
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public interface BluetoothCallback {
+        void onBluetoothTurningOn();
+        void onBluetoothOn();
+        void onBluetoothTurningOff();
+        void onBluetoothOff();
+        void onUserDeniedActivation();
+    }
+
+    public interface DeviceCallback {
+        void onDeviceConnected(BluetoothDevice device);
+        void onDeviceDisconnected(BluetoothDevice device, String message);
+        void onMessage(byte[] message);
+        void onError(int errorCode);
+        void onConnectError(BluetoothDevice device, String message);
+    }
+
+
 
 }
 

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,15 +31,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static BluetoothSocket mmSocket;
 
-    BluetoothDevice mDevice;
+    static  BluetoothDevice  mDevice;
     ConnectThread mConnectThread;
-    static ConnectedThread mConnectedThread;
+    ConnectedThread mConnectedThread;
     Boolean isConnected = false;
+    public static Bluetooth2 b;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mbluetoothAdapter == null)
@@ -60,8 +64,23 @@ public class MainActivity extends AppCompatActivity {
                     isConnected = true;
                      mDevice = device;
                 }
+                //b.connectToName(mDevice.getName());
+                //b.connectInThread(mmSocket, mDevice);
                 mConnectThread = new ConnectThread(mDevice);
                 mConnectThread.start();
+
+                /*if(mDevice.getName() == "DSD Tech HC-05")
+                {
+                    mConnectThread = new ConnectThread(mDevice);
+                    mConnectThread.start();
+                }
+                else
+                {
+                    Toast message = Toast.makeText(getApplicationContext(),"Please connect to the glove", Toast.LENGTH_LONG);
+                    message.show();
+
+                }*/
+
             }
         }
 
@@ -129,22 +148,23 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.tab_connect:
-                if(!isConnected)
-                {
-                    Intent intent = new Intent(MainActivity.this, Bluetooth.class);
+               // if(!isConnected)
+               // {
+                    //Intent intent = new Intent(MainActivity.this, Bluetooth.class);
+                    Intent intent = new Intent(MainActivity.this, Select.class);
                     startActivity(intent);
-                }
-                else
-                {
-                    Toast message = Toast.makeText(getApplicationContext(),"Already Connected to Glove:\n" + mDevice.getName(), Toast.LENGTH_LONG);
-                    message.show();
-                }
+               // }
+               // else
+              //  {
+                //    Toast message = Toast.makeText(getApplicationContext(),"Already Connected to Glove:\n" + mDevice.getName(), Toast.LENGTH_LONG);
+                 //   message.show();
+               // }
                 break;
 
             case R.id.tab_TrainingSession:
                 if(isConnected)
                 {
-                    Intent intent1 = new Intent(MainActivity.this, TrainingSession.class);
+                    Intent intent1 = new Intent(MainActivity.this, Chat.class);
                     startActivity(intent1);
                 }
                 else
@@ -155,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.tab_Results:
+            /*case R.id.tab_Results:
                 if(isConnected)
                 {
                     Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
@@ -167,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     message.show();
                 }
 
-                break;
+                break;*/
 
 
         }
