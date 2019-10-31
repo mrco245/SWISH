@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
+
 
         mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mbluetoothAdapter == null)
@@ -81,13 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
                 }*/
 
+
             }
-        }
+        //}
 
         ////DSD Tech HC-05
         //00:14:03:06:19:2D
 
-    }
+   // }
 
     @Override
     protected void onDestroy() {

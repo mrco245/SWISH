@@ -27,12 +27,12 @@ import me.aflak.pulltorefresh.PullToRefresh;
  * Created by Omar on 16/07/2015.
  */
 public class Select extends AppCompatActivity implements PullToRefresh.OnRefreshListener {
-    private Bluetooth bt;
-    private ListView listView;
-    private Button not_found;
-    private static List<BluetoothDevice> paired;
-    private PullToRefresh pull_to_refresh;
-    private boolean registered=false;
+    public static  Bluetooth bt;
+    public static  ListView listView;
+    public static  Button not_found;
+    public static List<BluetoothDevice> paired;
+    public static  PullToRefresh pull_to_refresh;
+    public static  boolean registered=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
 
         bt = new Bluetooth(this);
         bt.enable();
+       bt.onStart();
 
         pull_to_refresh = (PullToRefresh)findViewById(R.id.pull_to_refresh);
         listView =  (ListView)findViewById(R.id.list);
@@ -64,6 +65,7 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
                     registered=false;
                 }
                 startActivity(i);
+                bt.onStop();
                 finish();
             }
         });
@@ -76,7 +78,7 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
             }
         });
 
-//        addDevicesToList();
+        addDevicesToList();
     }
 
     @Override

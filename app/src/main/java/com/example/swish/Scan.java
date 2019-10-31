@@ -38,19 +38,19 @@ public class Scan extends AppCompatActivity implements DiscoveryCallback, Adapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select);
+        setContentView(R.layout.activity_scan);
 
         listView = (ListView)findViewById(R.id.scan_list);
         state = (TextView) findViewById(R.id.scan_state);
         progress = (ProgressBar) findViewById(R.id.scan_progress);
         scan = (Button) findViewById(R.id.scan_scan_again);
 
-       // adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
         bluetooth = new Bluetooth(this);
+        bluetooth.onStart();
         bluetooth.setDiscoveryCallback(this);
 
        // bluetooth.scanDevices();
@@ -78,6 +78,7 @@ public class Scan extends AppCompatActivity implements DiscoveryCallback, Adapte
                 state.setText("Scanning...");
                 //bluetooth.scanDevices();
                 bluetooth.stopScanning();
+
             }
         });
     }
@@ -146,6 +147,7 @@ public class Scan extends AppCompatActivity implements DiscoveryCallback, Adapte
         setText("Paired!");
         Intent i = new Intent(Scan.this, Select.class);
         startActivity(i);
+        bluetooth.onStop();
         finish();
 
     }

@@ -27,21 +27,24 @@ import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
 
 import static com.example.swish.MainActivity.mDevice;
+import static com.example.swish.Select.bt;
+import static com.example.swish.Select.paired;
 
 
 public class Chat extends AppCompatActivity implements DeviceCallback {
-    private String name;
-   private me.aflak.bluetooth.Bluetooth b;
-    private EditText message;
-    private Button send;
-    private TextView text;
-    private ScrollView scrollView;
-    private boolean registered=false;
+    public static  String name;
+    public static  me.aflak.bluetooth.Bluetooth b;
+    public static  EditText message;
+    public   Button send;
+    public static  TextView text;
+    public static  ScrollView scrollView;
+    public static  boolean registered=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chat);
+
 
         text = (TextView)findViewById(R.id.text);
         message = (EditText)findViewById(R.id.message);
@@ -51,23 +54,28 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
         text.setMovementMethod(new ScrollingMovementMethod());
         send.setEnabled(false);
 
-        b = new Bluetooth(this);
-        b.enable();
+       bt = new Bluetooth(this);
+       bt.onStart();
 
-        b.setCallbackOnUI(this);
+
+        bt.setCallbackOnUI(this);
 
         int pos = getIntent().getExtras().getInt("pos");
-        name = b.getPairedDevices().get(pos).getName();
+        name = bt.getPairedDevices().get(pos).getName();
 
         Display("Connecting...");
-        b.connectToDevice(b.getPairedDevices().get(pos));
+
+        bt.connectToName(name);
+        //bt.connectToDevice(bt.getPairedDevices().get(pos));
+
+        onDeviceConnected(bt.getPairedDevices().get(pos));
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String msg = message.getText().toString();
                 message.setText("");
-                b.send(msg);
+                bt.send(msg.getBytes());
                 Display("You: "+msg);
             }
         });
@@ -84,6 +92,7 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
             unregisterReceiver(mReceiver);
             registered=false;
         }
+        bt.onStop();
     }
 
     public void Display(final String s){
@@ -112,7 +121,7 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
     public void onDeviceDisconnected(BluetoothDevice device, String message) {
         Display("Disconnected!");
         Display("Connecting again...");
-        b.connectToDevice(device);
+        bt.connectToDevice(device);
     }
 
     @Override
@@ -136,7 +145,7 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        b.connectToDevice(device);
+                        bt.connectToDevice(device);
                     }
                 }, 2000);
             }
