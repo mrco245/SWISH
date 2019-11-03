@@ -18,14 +18,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.pulltorefresh.PullToRefresh;
 
-/**
- * Created by Omar on 16/07/2015.
- */
 public class Select extends AppCompatActivity implements PullToRefresh.OnRefreshListener {
     public static  Bluetooth bt;
     public static  ListView listView;
@@ -45,7 +41,7 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
 
         bt = new Bluetooth(this);
         bt.enable();
-       bt.onStart();
+        bt.onStart();
 
         pull_to_refresh = (PullToRefresh)findViewById(R.id.pull_to_refresh);
         listView =  (ListView)findViewById(R.id.list);

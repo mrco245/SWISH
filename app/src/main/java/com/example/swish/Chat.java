@@ -12,39 +12,35 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.io.OutputStream;
-
 import me.aflak.bluetooth.Bluetooth;
+import me.aflak.bluetooth.interfaces.BluetoothCallback;
 import me.aflak.bluetooth.interfaces.DeviceCallback;
-
-import static com.example.swish.MainActivity.mDevice;
-import static com.example.swish.Select.bt;
-import static com.example.swish.Select.paired;
+import me.aflak.bluetooth.reader.LineReader;
 
 
-public class Chat extends AppCompatActivity implements DeviceCallback {
+public class Chat extends AppCompatActivity {
     public static  String name;
-    public static  me.aflak.bluetooth.Bluetooth b;
+    public static  me.aflak.bluetooth.Bluetooth bt;
     public static  EditText message;
     public   Button send;
     public static  TextView text;
     public static  ScrollView scrollView;
     public static  boolean registered=false;
 
+    DeviceCallback deviceCallback;
+    BluetoothCallback bluetoothCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
 
         text = (TextView)findViewById(R.id.text);
         message = (EditText)findViewById(R.id.message);
@@ -54,21 +50,71 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
         text.setMovementMethod(new ScrollingMovementMethod());
         send.setEnabled(false);
 
-       bt = new Bluetooth(this);
-       bt.onStart();
+        bt = new Bluetooth(this);
+        bt.onStart();
 
+        deviceCallback = new DeviceCallback() {
+            @Override
+            public void onDeviceConnected(BluetoothDevice device) {
+               Display("Connected to "+device.getName()+" - "+device.getAddress());
+
+               Chat.this.runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       send.setEnabled(true);
+                   }
+               });
+            }
+
+            @Override
+            public void onDeviceDisconnected(BluetoothDevice device, String message) {
+               Display("Disconnected!");
+               Display("Connecting again...");
+               bt.connectToDevice(device);
+            }
+
+            @Override
+            public void onMessage(byte[] message) {
+               String mess =  new String(message);
+               System.out.println(mess);
+               Display(name +": "+ mess);
+           }
+
+            @Override
+            public void onError(int errorCode) {
+               Display("Error: "+message);
+            }
+
+            @Override
+            public void onConnectError(final BluetoothDevice device, String message) {
+               Display("Error: "+message);
+               Display("Trying again in 3 sec.");
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       Handler handler = new Handler();
+                       handler.postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               bt.connectToDevice(device);
+                           }
+                       }, 2000);
+                   }
+               });
+            }
+        };
 
         bt.setCallbackOnUI(this);
+        bt.setDeviceCallback(deviceCallback);
+        bt.setBluetoothCallback(bluetoothCallback);
+        bt.setReader(LineReader.class);
 
         int pos = getIntent().getExtras().getInt("pos");
         name = bt.getPairedDevices().get(pos).getName();
 
         Display("Connecting...");
 
-        bt.connectToName(name);
-        //bt.connectToDevice(bt.getPairedDevices().get(pos));
-
-        onDeviceConnected(bt.getPairedDevices().get(pos));
+        bt.connectToDevice(bt.getPairedDevices().get(pos));
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +122,7 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
                 String msg = message.getText().toString();
                 message.setText("");
                 bt.send(msg.getBytes());
-                Display("You: "+msg);
+                Display("You: "+ msg);
             }
         });
 
@@ -95,59 +141,12 @@ public class Chat extends AppCompatActivity implements DeviceCallback {
         bt.onStop();
     }
 
-    public void Display(final String s){
+    public void Display(final String s) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 text.append(s + "\n");
                 scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
-    }
-
-
-    @Override
-    public void onDeviceConnected(BluetoothDevice device) {
-        Display("Connected to "+device.getName()+" - "+device.getAddress());
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                send.setEnabled(true);
-            }
-        });
-    }
-
-    @Override
-    public void onDeviceDisconnected(BluetoothDevice device, String message) {
-        Display("Disconnected!");
-        Display("Connecting again...");
-        bt.connectToDevice(device);
-    }
-
-    @Override
-    public void onMessage(byte[] message) {
-        Display(name+": "+message);
-    }
-
-    @Override
-    public void onError(int errorCode) {
-        Display("Error: "+message);
-    }
-
-    @Override
-    public void onConnectError(final BluetoothDevice device, String message) {
-        Display("Error: "+message);
-        Display("Trying again in 3 sec.");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        bt.connectToDevice(device);
-                    }
-                }, 2000);
             }
         });
     }

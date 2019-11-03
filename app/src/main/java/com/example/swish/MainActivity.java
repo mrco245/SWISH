@@ -3,26 +3,12 @@ package com.example.swish;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Set;
-import java.util.UUID;
-
-import static com.example.swish.Bluetooth.mbluetoothAdapter;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,11 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static BluetoothSocket mmSocket;
 
-    static  BluetoothDevice  mDevice;
-    ConnectThread mConnectThread;
-    ConnectedThread mConnectedThread;
-    Boolean isConnected = false;
-    public static Bluetooth2 b;
+    Boolean isConnected = true;
+
+    me.aflak.bluetooth.Bluetooth ble = new me.aflak.bluetooth.Bluetooth(this);
 
 
     @Override
@@ -43,49 +27,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
 
-
-        mbluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(mbluetoothAdapter == null)
-        {
-            //device does not support
+        ble.onStart();
+        if (!ble.isEnabled()) {
+            Intent enableBTintnet = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBTintnet, 1);
         }
-        else
-        {
-            if(!mbluetoothAdapter.isEnabled())
-            {
-                Intent enableBTintnet = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBTintnet, 1);
-            }
-            Set<BluetoothDevice> pairedDevices = mbluetoothAdapter.getBondedDevices();
-            if(pairedDevices.size() >0)
-            {
-                for(BluetoothDevice device : pairedDevices)
-                {
-                    isConnected = true;
-                     mDevice = device;
-                }
-                //b.connectToName(mDevice.getName());
-                //b.connectInThread(mmSocket, mDevice);
-                mConnectThread = new ConnectThread(mDevice);
-                mConnectThread.start();
-
-                /*if(mDevice.getName() == "DSD Tech HC-05")
-                {
-                    mConnectThread = new ConnectThread(mDevice);
-                    mConnectThread.start();
-                }
-                else
-                {
-                    Toast message = Toast.makeText(getApplicationContext(),"Please connect to the glove", Toast.LENGTH_LONG);
-                    message.show();
-
-                }*/
-
-
-            }
-        //}
+    }
 
         ////DSD Tech HC-05
         //00:14:03:06:19:2D
@@ -95,41 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mConnectThread.cancel();
-        mConnectedThread.cancel();
     }
-
-    private class ConnectThread extends Thread {
-
-        private final BluetoothDevice mmDevice;
-        private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-        public ConnectThread(BluetoothDevice device) {
-            BluetoothSocket tmp = null;
-            mmDevice = device;
-            try {
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
-            } catch (IOException e) { }
-            mmSocket = tmp;
-        }
-        public void run() {
-            mbluetoothAdapter.cancelDiscovery();
-            try {
-                mmSocket.connect();
-            } catch (IOException connectException) {
-                try {
-                    mmSocket.close();
-                } catch (IOException closeException) { }
-                return;
-            }
-        }
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) { }
-        }
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     //Intent intent = new Intent(MainActivity.this, Bluetooth.class);
                     Intent intent = new Intent(MainActivity.this, Select.class);
                     startActivity(intent);
+                    ble.onStop();
                // }
                // else
               //  {
@@ -169,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Intent intent1 = new Intent(MainActivity.this, Chat.class);
                     startActivity(intent1);
+                    ble.onStop();
                 }
                 else
                 {
@@ -196,79 +112,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public class ConnectedThread extends Thread {
-
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
-        public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
-
-        public void run() {
-            byte[] buffer = new byte[1024];
-            int begin = 0;
-            int bytes = 0;
-
-            Handler mHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    byte[] writeBuf = (byte[]) msg.obj;
-                    int begin = (int)msg.arg1;
-                    int end = (int)msg.arg2;
-
-                    switch(msg.what) {
-                        case 1:
-                            String writeMessage = new String(writeBuf);
-                            writeMessage = writeMessage.substring(begin, end);
-                            break;
-                    }
-                }
-            };
-
-            while (true) {
-                try {
-                    bytes += mmInStream.read(buffer, bytes, buffer.length - bytes);
-                    for(int i = begin; i < bytes; i++) {
-                        if(buffer[i] == "#".getBytes()[0]) {
-                            mHandler.obtainMessage(1, begin, i, buffer).sendToTarget();
-                            begin = i + 1;
-                            if(i == bytes - 1) {
-                                bytes = 0;
-                                begin = 0;
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    break;
-                }
-            }
-
-            ConnectedThread mConnectedThread = new ConnectedThread(mmSocket);
-            mConnectedThread.start();
-        }
-        public void write(byte[] bytes) {
-            try {
-                mmOutStream.write(bytes);
-            } catch (IOException e) { }
-        }
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) { }
-        }
-    }
-
 
 }
