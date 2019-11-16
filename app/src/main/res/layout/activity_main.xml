@@ -13,6 +13,8 @@
             android:layout_height="369dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:contentDescription="@string/logo"
+            android:scaleType="fitCenter"
             app:srcCompat="@mipmap/swish_foreground" />
 
         <TextView
@@ -22,24 +24,27 @@
             android:layout_below="@+id/imageView"
             android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
-            android:text="Supportive Wearable Inertia Sensing Hand"
+            android:text="@string/swish"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/Black"
             android:textSize="18sp"
-            android:textStyle="bold"
             android:typeface="normal"
-            app:fontFamily="casual" />
+            app:fontFamily="@font/alfa_slab_one" />
 
         <TextView
             android:id="@+id/Team21"
-            android:layout_below="@id/SWISH"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Team21"
+            android:layout_below="@id/SWISH"
             android:gravity="center_horizontal"
+            android:text="@string/team"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/Black"
             android:textSize="18sp"
             android:textStyle="bold"
             android:typeface="normal"
-            app:fontFamily="casual"/>
+            app:fontFamily="@font/alfa_slab_one" />
 
 </RelativeLayout>

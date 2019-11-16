@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.interfaces.BluetoothCallback;
@@ -36,6 +37,8 @@ public class Chat extends AppCompatActivity {
 
     DeviceCallback deviceCallback;
     BluetoothCallback bluetoothCallback;
+
+    int numShots = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,8 @@ public class Chat extends AppCompatActivity {
         deviceCallback = new DeviceCallback() {
             @Override
             public void onDeviceConnected(BluetoothDevice device) {
-               Display("Connected to "+device.getName()+" - "+device.getAddress());
+                name = "SWISH ";
+               Display("Connected to "+ name+" - "+device.getAddress());
 
                Chat.this.runOnUiThread(new Runnable() {
                    @Override
@@ -75,14 +79,17 @@ public class Chat extends AppCompatActivity {
 
             @Override
             public void onMessage(byte[] message) {
-               String mess =  new String(message);
-               System.out.println(mess);
-               Display(name +": "+ mess);
+
+                numShots++;
+                String finalMess = " ";
+                finalMess = new String(message);
+
+                Display(name +": Shot " + numShots + ":" + finalMess);
            }
 
             @Override
             public void onError(int errorCode) {
-               Display("Error: "+message);
+               Display("Error: "+ message);
             }
 
             @Override
@@ -139,6 +146,13 @@ public class Chat extends AppCompatActivity {
             registered=false;
         }
         bt.onStop();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Toast.makeText(this, "Back Button is disabled!",
+                Toast.LENGTH_LONG).show();
     }
 
     public void Display(final String s) {

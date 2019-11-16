@@ -5,9 +5,4 @@
         android:id="@+id/tab_connect"
         android:title="Connect"
             />
-    <item
-        android:id="@+id/tab_TrainingSession"
-        android:title="Training Session" />
-
-
 </menu>

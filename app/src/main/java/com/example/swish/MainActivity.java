@@ -17,8 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static BluetoothSocket mmSocket;
 
-    Boolean isConnected = true;
-
     me.aflak.bluetooth.Bluetooth ble = new me.aflak.bluetooth.Bluetooth(this);
 
 
@@ -26,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         ble.onStart();
         if (!ble.isEnabled()) {
@@ -38,11 +35,10 @@ public class MainActivity extends AppCompatActivity {
         ////DSD Tech HC-05
         //00:14:03:06:19:2D
 
-   // }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //ble.onStop();
     }
 
     @Override
@@ -65,50 +61,9 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.tab_connect:
-               // if(!isConnected)
-               // {
-                    //Intent intent = new Intent(MainActivity.this, Bluetooth.class);
                     Intent intent = new Intent(MainActivity.this, Select.class);
                     startActivity(intent);
-                    ble.onStop();
-               // }
-               // else
-              //  {
-                //    Toast message = Toast.makeText(getApplicationContext(),"Already Connected to Glove:\n" + mDevice.getName(), Toast.LENGTH_LONG);
-                 //   message.show();
-               // }
-                break;
-
-            case R.id.tab_TrainingSession:
-                if(isConnected)
-                {
-                    Intent intent1 = new Intent(MainActivity.this, Chat.class);
-                    startActivity(intent1);
-                    ble.onStop();
-                }
-                else
-                {
-                    Toast message = Toast.makeText(getApplicationContext(),"Please Connect to Glove", Toast.LENGTH_LONG);
-                    message.show();
-                }
-
-                break;
-
-            /*case R.id.tab_Results:
-                if(isConnected)
-                {
-                    Intent intent2 = new Intent(MainActivity.this, VisualFeedback.class);
-                    startActivity(intent2);
-                }
-                else
-                {
-                    Toast message = Toast.makeText(getApplicationContext(),"Please Connect to Glove", Toast.LENGTH_LONG);
-                    message.show();
-                }
-
-                break;*/
-
-
+                    break;
         }
         return super.onOptionsItemSelected(item);
     }

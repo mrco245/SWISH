@@ -101,10 +101,18 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
     @Override
     public void onDestroy() {
         super.onDestroy();
+//        bt.onStop();
         if(registered) {
             unregisterReceiver(mReceiver);
             registered=false;
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Toast.makeText(this, "Please select a bluetooth device to connect with or scan for more devices!",
+                Toast.LENGTH_LONG).show();
     }
 
     private void addDevicesToList(){
@@ -112,7 +120,8 @@ public class Select extends AppCompatActivity implements PullToRefresh.OnRefresh
 
         List<String> names = new ArrayList<>();
         for (BluetoothDevice d : paired){
-            names.add(d.getName());
+            //names.add(d.getName());
+            names.add("SWISH Glove");
         }
 
         String[] array = names.toArray(new String[names.size()]);
