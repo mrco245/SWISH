@@ -38,7 +38,6 @@ public class Chat extends AppCompatActivity {
     DeviceCallback deviceCallback;
     BluetoothCallback bluetoothCallback;
 
-    int numShots = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +79,10 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onMessage(byte[] message) {
 
-                numShots++;
                 String finalMess = " ";
                 finalMess = new String(message);
 
-                Display(name +": Shot " + numShots + ":" + finalMess);
+                Display(name +": " + finalMess);
            }
 
             @Override
